@@ -33,6 +33,32 @@ Currently, the `Hand` class must be imported from `demo.py`.  If someone would l
 
 A pretrained model is included, but if you'd like to train your own, read <a href='https://github.com/sjvasquez/handwriting-synthesis/tree/master/data/raw'>these instructions</a>.
 
+## Trace On Ender 3 (Marlin, COM3)
+You can stream generated handwriting directly to a Marlin printer over USB serial (for example an Ender 3 on `COM3`) using `marlin_trace.py`.
+
+1. Install dependencies (including `pyserial`).
+2. Mount a pen/marker tool so `Z` motion lifts and lowers the pen.
+3. Home and verify safe `Z` values for your setup.
+
+Example:
+
+```bash
+python marlin_trace.py --text "Hello from Ender 3" "This is direct serial" --port COM3 --style 9 --bias 0.75 --max-width 180 --max-height 160 --z-up 5 --z-down 0
+```
+
+Useful options:
+
+- `--dry-run`: build toolpaths without sending to the printer.
+- `--gcode-out trace.gcode`: save generated G-code for inspection.
+- `--no-home`: skip `G28` if your machine is already homed.
+- `--flip-y`: invert Y direction if your rig traces mirrored output.
+
+Safety notes:
+
+- Default drawing area is inside a 200x200 mm box with margins, which fits an Ender 3 bed.
+- Always test with `--dry-run --gcode-out` first, then run live.
+- Confirm `--z-up` and `--z-down` match your pen mount before sending commands.
+
 ## Demonstrations
 Below are a few hundred samples from the model, including some samples demonstrating the effect of priming and biasing the model.  Loosely speaking, biasing controls the neatness of the samples and priming controls the style of the samples. The code for these demonstrations can be found in `demo.py`.
 
